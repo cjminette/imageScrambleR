@@ -1,14 +1,27 @@
 Package: imageScrambleR
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Image Scrambling and Similarity Exercise in R and C++
 Version: 1.0
 Date: 2020-04-26
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does
-       as one or more full sentences.
+Author: Carrie Minette
+Maintainer: Carrie Minette <carrie.minette@coyotes.usd.edu>
+Description: Transpose chunks of an image array to create a scrambled image and
+    compute cross-similarity of corresponding chunks from scrambled and 
+    original.  Scrambling and cross-similarity functions are each written in 
+    both pure R and Rcpp-enabled C++ to allow benchmark comparisons.
 License: GPL (>= 2)
 Imports: 
-    Rcpp (>= 1.0.4),
-    magick
-LinkingTo: Rcpp
+    Rcpp,
+    RcppThread,
+    magick,
+    RcppParallel
+LinkingTo: Rcpp,
+    RcppThread,
+    RcppParallel
+RoxygenNote: 7.1.0
+SystemRequirements: C++11, GNU make
+Suggests: 
+    knitr,
+    rmarkdown,
+    microbenchmark
+VignetteBuilder: knitr

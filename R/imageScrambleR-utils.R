@@ -1,5 +1,5 @@
-#' @title Conversion Between 2-D Array and Image
 #' @name imageScrambleR-conversions
+#' @title Conversion Between 2-D Array and Image
 #'
 #' These two convenience functions provide conversion between images as handled
 #' by \link[package]{magick} and two-dimensional arrays containing grayscale
@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' if(interactive()){
-#'     imgArr <- array(c(1,1,2,2,1,1,2,2,3,3,4,4,3,3,4,4),
+#'     imgArr <- array(as.raw(c(1,1,2,2,1,1,2,2,3,3,4,4,3,3,4,4)),
 #'                     dim = c(4,4))
 #'     print(imgArr)
 #'     magick_imgArr <- arr2magick(imgArr)
@@ -46,3 +46,6 @@ magick2arr <- function(img){
     arr <- magick::image_data(bw)[1,,]
     return(arr)
 }
+
+
+
