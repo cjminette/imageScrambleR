@@ -4,11 +4,7 @@
 \alias{imageScrambleR-conversions}
 \alias{arr2magick}
 \alias{magick2arr}
-\title{Conversion Between 2-D Array and Image
-
-These two convenience functions provide conversion between images as handled
-by \link[package]{magick} and two-dimensional arrays containing grayscale
-data for images.}
+\title{Conversion Between 2-D Array and Image}
 \usage{
 arr2magick(imgArr)
 
@@ -25,8 +21,6 @@ A 2-D array containing grayscale pixel values, or a \pkg{magick}
     image object containing a grayscale image
 }
 \description{
-Conversion Between 2-D Array and Image
-
 These two convenience functions provide conversion between images as handled
 by \link[package]{magick} and two-dimensional arrays containing grayscale
 data for images.

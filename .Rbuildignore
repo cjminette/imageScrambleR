@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^proposal/
 ^vignettes/articles$
+^final/
+^README\.md

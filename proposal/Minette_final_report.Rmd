@@ -19,17 +19,17 @@ library(imageScrambleR)
 
 # Motivation
 
-_imageScrambleR_ is an image scrambling and similarity exercise written in R and C++.  The primary purpose of this package was to provide an opportunity for the author to learn to write code that would utilize R's interface to C++ using the _Rcpp_ package, and demonstrate the speed gains available through such interfacing.  Such gains can be far more than trivial; one of R's most glaring downsides as a language is time inefficiency.  Though R provides many optimizations within the language itself for experienced users in an attempt to address this, the fact remains that a trade off occurs, favoring ease of use over computational speed.  When no further speed can be eked out through the use of R's native vectorization support and other tricks, the next option is to interface with an inherently faster lower level language such as C/C++.
+_imageScrambleR_ is an image scrambling and similarity exercise written in R and C++.  The primary purpose of this package was to provide an opportunity for the author to learn to write code that would utilize R's interface to C++ using the _Rcpp_ package, and ascertain what speed gains are available through such interfacing.  Such gains could potentially be far more than trivial; time inefficiency is one of the most glaring downsides R as a language has been known for.  Though R provides many optimizations within the language itself for experienced users in an attempt to address this, the fact remains that a trade off occurs, favoring ease of use over computational speed.  When no further speed can be eked out through the use of R's native vectorization support and other tricks, the next option is to explore an interface with an inherently faster lower level language such as C/C++.
 
 # Background
-When initially proposed, _imageScrambleR_ was a relatively ambitious project for the author, who had never before interfaced between any two languages, let alone between two languages with such notable paradigm differences.  While R contains a C API that it utilizes under the hood, and extensions of this API such as the _Rcpp_ package exist to provide an interface capable of compiling C++, R is, at its heart, a functional language based on the idea that anything that exists in R is an object, and anything that happens in R is a function.  In contrast, C is an imperative language, with object-oriented support largely provided by C++.  Thus, writing code that is interoperable between R and C++ provided numerous design challenges, as the best methods for approaching any task can vary wildly between the two languages. These challenges were compounded by hardware complications encountered by the author, when some of the compiled C++ code from an R package utilized by another project the author was previously part of caused a conflict with a cloud-based file syncing service.  This conflict eventually led a corrupted operating system pointer.The established methods to correct these problems instead compounded them, causing the issue to snowball, resulting in the author spending three days restoring the operating system multiple times, and losing more time as a software development workflow environment that had been built up over the course of several years needed to be rebuilt piece by piece. 
+When initially proposed, _imageScrambleR_ was a relatively ambitious project for the author, who had never before interfaced between any two languages, let alone between two languages with such notable paradigm differences.  While R contains a C API that it utilizes under the hood, and extensions of this API such as the _Rcpp_ package exist to provide an interface capable of compiling C++, R is, at its heart, a functional language based on the idea that anything that exists in R is an object, and anything that happens in R is a function.  In contrast, C is an imperative language, with object-oriented support largely provided by C++.  Thus, writing code that is interoperable between R and C++ provided numerous design challenges, as the best methods for approaching any task can vary wildly between the two languages. These challenges were compounded by hardware complications encountered by the author, when some of the compiled C++ code from an R package utilized by another project the author was previously part of caused a conflict with a cloud-based file syncing service.  This conflict created a corrupted operating system pointer.  The established methods to correct these problems instead compounded them, causing the issue to snowball, resulting in the author spending three days restoring the operating system multiple times, and losing far more time as a software development workflow environment that had been built up over the course of several years needed to be rebuilt piece by piece. 
 
 # Features
 Having experienced first-hand the severity of the problems that can be caused by improper interactions between R, C++, and the surrounding development environment, the author was perhaps overly cautious, making every attempt to gain sufficient knowledge of the task at hand through extensive research before attempting to write code using _Rcpp_'s interface.  The cumulative effect of these combined confounding factors led to software that falls short of its proposal due to time constraints.  The current product lacks the similarity methods originally proposed, and the threaded image scrambling method is inoperable, crashing R on usage.  Nonetheless, important strides were made.  As it stands, the package features include:
-- Two convenience wrappers to facilitate converions between the format used by the image manipulation package _magick_ and the raw hexadecimal matrices used by the package functions (*arr2magick* and _magick2arr_)
-- An image scrambler written in optimized R code (*scrambler_R*),
-- An image scrambler written in _Rcpp_-enabled C++ that emulates R design ideals (*scrambler_Cpp2*)
-- An image scrambler written in _Rcpp_-enabled C++ using object-oriented design ideals (*scrambler_Cpp*)
+* Two convenience wrappers to facilitate converions between the format used by the image manipulation package _magick_ and the raw hexadecimal matrices used by the package functions (*arr2magick* and _magick2arr_)
+* An image scrambler written in optimized R code (*scrambler_R*),
+* An image scrambler written in _Rcpp_-enabled C++ that emulates R design ideals (*scrambler_Cpp2*)
+* An image scrambler written in _Rcpp_-enabled C++ using object-oriented design ideals (*scrambler_Cpp*)
 
 # Results
 To demonstrate _imageScrambleR_'s current capabilities, the following code loads a variety of images using the _magick_ package.
@@ -106,33 +106,41 @@ print(sephiroth_scram)
 The R package _microbenchmark_ was used to run the three image scramblers 100 times each, using the same input parameters.
 Output time is in nanoseconds.
 ```{r benchmark_r, echo=TRUE}
-benchmarks_r_logo <- microbenchmark::microbenchmark(scrambler_R(r_logo_arr, 3L),
-                                             scrambler_Cpp2(r_logo_arr, 3L),
-                                             scrambler_Cpp(r_logo_arr, 3L))
+benchmarks_r_logo <- microbenchmark::microbenchmark(
+    scrambler_R(r_logo_arr, 3L),
+    scrambler_naiveR(r_logo_arr, 3L),
+    scrambler_Cpp2(r_logo_arr, 3L),
+    scrambler_Cpp(r_logo_arr, 3L))
 print(benchmarks_r_logo)
 plot(benchmarks_r_logo)
 ```
 
 ```{r benchmark_q, echo=TRUE}
-benchmarks_queen75 <- microbenchmark::microbenchmark(scrambler_R(queen75_arr, 5L),
-                                             scrambler_Cpp2(queen75_arr, 5L),
-                                             scrambler_Cpp(queen75_arr, 5L))
+benchmarks_queen75 <- microbenchmark::microbenchmark(
+    scrambler_R(queen75_arr, 5L),
+    scrambler_naiveR(queen75_arr, 5L),
+    scrambler_Cpp2(queen75_arr, 5L),
+    scrambler_Cpp(queen75_arr, 5L))
 print(benchmarks_queen75)
 plot(benchmarks_queen75)
 ```
 
 ```{r benchmark_m, echo=TRUE}
-benchmarks_muthur <- microbenchmark::microbenchmark(scrambler_R(muthur_arr, 7L),
-                                             scrambler_Cpp2(muthur_arr, 7L),
-                                             scrambler_Cpp(muthur_arr, 7L))
+benchmarks_muthur <- microbenchmark::microbenchmark(
+    scrambler_R(muthur_arr, 7L),
+    scrambler_naiveR(muthur_arr, 7L),
+    scrambler_Cpp2(muthur_arr, 7L),
+    scrambler_Cpp(muthur_arr, 7L))
 print(benchmarks_muthur)
 plot(benchmarks_muthur)
 ```
 
 ```{r benchmark_s, echo=TRUE}
-benchmarks_sephiroth <- microbenchmark::microbenchmark(scrambler_R(sephiroth_arr, 9L),
-                                             scrambler_Cpp2(sephiroth_arr, 9L),
-                                             scrambler_Cpp(sephiroth_arr, 9L))
+benchmarks_sephiroth <- microbenchmark::microbenchmark(
+    scrambler_R(sephiroth_arr, 9L),
+    scrambler_naiveR(sephiroth_arr, 9L),
+    scrambler_Cpp2(sephiroth_arr, 9L),
+    scrambler_Cpp(sephiroth_arr, 9L))
 print(benchmarks_sephiroth)
 plot(benchmarks_sephiroth)
 ```

@@ -1,6 +1,6 @@
 #' @name imageScrambleR-conversions
 #' @title Conversion Between 2-D Array and Image
-#'
+#' @description
 #' These two convenience functions provide conversion between images as handled
 #' by \link[package]{magick} and two-dimensional arrays containing grayscale
 #' data for images.

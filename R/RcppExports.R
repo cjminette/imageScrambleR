@@ -59,34 +59,3 @@ scrambler_Cpp2 <- function(arr, nchunks) {
     .Call(`_imageScrambleR_scrambler_Cpp2`, arr, nchunks)
 }
 
-#' @name scrambler_Cpp_threaded
-#' @title Scramble a 2-D Array
-#'
-#' Divides a two-dimensional array into \code{nchunk * nchunk} pieces and
-#' scrambles the order in which the pieces appear without altering the size of
-#' the array, using threads.
-#'
-#' @param arr The array to be scrambled
-#' @param nchunks Integer indicating the number of chunks into which each
-#'     dimension should be divided, i.e. \code{nchunks = 3} will divide the
-#'     rows into 3 chunks and the columns into 3 chunks, yielding 9 pieces
-#'
-#' @return A scrambled version of \code{arr}
-#' @importFrom RcppParallel RcppParallelLibs
-#' @export
-#'
-#' @examples
-#' # for reproducible results, call set.seed()
-#' set.seed(42)
-#' scrambleMe <- array(as.raw(c(1,1,2,2,1,1,2,2,3,3,4,4,3,3,4,4)),
-#'                      dim = c(4,4))
-#' print(scrambleMe)
-#' scrambleMe <- scrambler_Cpp_threaded(arr = scrambleMe, nchunks = 2L,
-#'                                      nthreads = 2)
-#' print(scrambleMe)
-NULL
-
-scrambler_Cpp_threaded <- function(arr, nchunks) {
-    .Call(`_imageScrambleR_scrambler_Cpp_threaded`, arr, nchunks)
-}
-

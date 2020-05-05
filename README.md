@@ -1,4 +1,4 @@
-#imageScrambleR: Image Scrambling Exercise in R and C++
+# imageScrambleR: Image Scrambling Exercise in R and C++
 
 
 *imageScrambleR* features functions that transpose chunks of an image array to create a scrambled image, as well as convenience functions to convert *magick* images to hexadecimal arrays containing grayscale pixel values, and those arrays back to *magick* images.  Scrambling functions are written pure R and Rcpp-enabled C++ to allow benchmark comparisons.
