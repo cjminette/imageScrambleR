@@ -29,23 +29,10 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// scrambler_Cpp_threaded
-Rcpp::RawMatrix scrambler_Cpp_threaded(Rcpp::RawMatrix arr, int nchunks);
-RcppExport SEXP _imageScrambleR_scrambler_Cpp_threaded(SEXP arrSEXP, SEXP nchunksSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::RawMatrix >::type arr(arrSEXP);
-    Rcpp::traits::input_parameter< int >::type nchunks(nchunksSEXP);
-    rcpp_result_gen = Rcpp::wrap(scrambler_Cpp_threaded(arr, nchunks));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_imageScrambleR_scrambler_Cpp", (DL_FUNC) &_imageScrambleR_scrambler_Cpp, 2},
     {"_imageScrambleR_scrambler_Cpp2", (DL_FUNC) &_imageScrambleR_scrambler_Cpp2, 2},
-    {"_imageScrambleR_scrambler_Cpp_threaded", (DL_FUNC) &_imageScrambleR_scrambler_Cpp_threaded, 2},
     {NULL, NULL, 0}
 };
 

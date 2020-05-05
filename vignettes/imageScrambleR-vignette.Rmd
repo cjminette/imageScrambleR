@@ -1,0 +1,60 @@
+---
+title: "imageScrambleR-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{imageScrambleR-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Once _imageScrambleR_ is installed, load the package.
+```{r setup, echo=TRUE}
+library(imageScrambleR)
+```
+
+To demonstrate _imageScrambleR_'s current capabilities, the following code loads an image using the _magick_ package, then displays it using that package's print method.
+```{r loadImage}
+r_logo_path <- file.path(R.home("doc"), "html", "logo.jpg")
+library(magick)
+r_logo <- image_read(r_logo_path)
+print(r_logo)
+```
+
+The _magick2arr_ function is used to convert these images to grayscale, then to matrices with hexadecimal values for each pixel.
+```{r m2r}
+r_logo_arr <- magick2arr(r_logo)
+head(r_logo_arr)
+```
+
+We can then use any of the four image scrambler functions to scramble the image using an integer to indicate how many chunks we want each dimension split into.
+```{r scram}
+r_logo_arr_scram <- scrambler_naiveR(r_logo_arr, 3L)
+r_logo_arr_scram <- scrambler_R(r_logo_arr, 3L)
+r_logo_arr_scram <- scrambler_Cpp(r_logo_arr, 3L)
+r_logo_arr_scram <- scrambler_Cpp2(r_logo_arr, 3L)
+```
+
+Now we can use the _arr2magick_ function to convert the image array back to _magick_ image format, and view it.
+```{r}
+r_logo_scram <- arr2magick(r_logo_arr_scram)
+print(r_logo_scram)
+```
+
+The R package _microbenchmark_ can be used to run the four image scramblers 100 times each, using the same input parameters.
+Output time is in nanoseconds.
+```{r benchmark_r, echo=TRUE}
+benchmarks_r_logo <- microbenchmark::microbenchmark(
+    scrambler_R(r_logo_arr, 3L),
+    scrambler_naiveR(r_logo_arr, 3L),
+    scrambler_Cpp2(r_logo_arr, 3L),
+    scrambler_Cpp(r_logo_arr, 3L))
+print(benchmarks_r_logo)
+plot(benchmarks_r_logo, names = c('R', 'naiveR', 'Cpp2', 'Cpp'))
+```
